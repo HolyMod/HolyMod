@@ -1,0 +1,40 @@
+{
+  "name": "holymod",
+  "version": "1.0.0",
+  "description": "A lightweight client mod focused on simplicity and performance.",
+  "scripts": {
+    "build-renderer": "rollup -c --mode=renderer",
+    "build-main": "rollup -c --mode=main",
+    "build-preload": "rollup -c --mode=preload",
+    "dist": "npm run build-renderer && npm run build-main && npm run build-preload"
+  },
+  "keywords": [],
+  "author": "Strencher",
+  "license": "ISC",
+  "devDependencies": {
+    "@rollup/plugin-alias": "^3.1.8",
+    "@rollup/plugin-json": "^4.1.0",
+    "@rollup/plugin-node-resolve": "^13.0.6",
+    "@types/lodash": "^4.14.176",
+    "@types/react": "^17.0.34",
+    "@types/react-dom": "^17.0.11",
+    "esformatter-quotes": "^1.1.0",
+    "rollup": "^2.59.0",
+    "rollup-plugin-esformatter": "^2.0.1",
+    "rollup-plugin-sourcemaps": "^0.6.3",
+    "rollup-plugin-swc": "^0.2.0"
+  },
+  "dependencies": {
+    "@swc/core": "^1.2.111",
+    "circular-dependency-plugin": "^5.2.2",
+    "css-loader": "^6.5.1",
+    "mini-css-extract-plugin": "^2.4.5",
+    "node-watch": "^0.7.2",
+    "sass": "^1.43.4",
+    "sass-loader": "^12.4.0",
+    "sucrase": "^3.20.3",
+    "swc-loader": "^0.1.15",
+    "webpack": "^5.65.0",
+    "webpack-cli": "^4.9.1"
+  }
+}

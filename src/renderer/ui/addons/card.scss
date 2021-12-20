@@ -1,0 +1,33 @@
+.container {
+    background: var(--background-secondary-alt);
+    padding: 10px;
+    border-radius: 4px;
+
+    .header {
+        display: flex;
+        align-items: center;
+        margin-bottom: 10px;
+    }
+
+    .description {
+        border-radius: 4px;
+        padding: 5px;
+        background: var(--background-secondary);
+        padding: 10px;
+        padding-bottom: 2px;
+    }
+
+    .controls {
+        display: flex;
+        align-items: center;
+        margin-left: auto;
+    }
+
+    .toolbutton-inner {
+        display: inline-flex;
+    }
+}
+
+.field {
+    margin-right: 5px;
+}

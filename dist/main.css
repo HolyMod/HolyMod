@@ -1,0 +1,92 @@
+/*!***********************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/.pnpm/css-loader@6.5.1_webpack@5.65.0/node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[1].use[1]!./node_modules/.pnpm/sass-loader@12.4.0_sass@1.45.0+webpack@5.65.0/node_modules/sass-loader/dist/cjs.js!./src/renderer/ui/components/settings.scss ***!
+  \***********************************************************************************************************************************************************************************************************************************************************************************/
+.holy-settings-panel {
+  color: #ddd;
+}
+.holy-settings-panel .holy-settings-title {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+  font-weight: bold;
+  font-size: 20px;
+  font-weight: 600;
+  font-family: var(--font-display);
+  color: var(--header-primary);
+}
+.holy-settings-panel .holy-settings-addons-controls {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+  padding: 10px;
+  background: var(--background-secondary-alt);
+  border-radius: 4px;
+}
+.holy-settings-panel .holy-settings-addons-controls .holy-settings-overflow-menu, .holy-settings-panel .holy-settings-addons-controls .holy-settings-open-folder {
+  margin-left: 5px;
+}
+.holy-settings-panel .holy-settings-addons-controls .holy-settings-addons-search {
+  flex-grow: 1;
+}
+.holy-settings-panel .holy-settings-card-scroller {
+  display: flex;
+  flex-direction: column;
+}
+.holy-settings-panel .holy-settings-title-caret {
+  color: var(--text-muted);
+}
+.holy-settings-panel .holy-settings-title-name {
+  cursor: pointer;
+  color: var(--header-secondary);
+}
+.holy-settings-panel .holy-settings-title-name:hover {
+  color: var(--header-primary);
+}
+.holy-settings-panel .holy-settings-title-sub {
+  color: var(--header-primary);
+}
+
+.holy-settings-overflow-header {
+  font-size: 12px;
+  font-weight: 700;
+  font-family: var(--font-display);
+  line-height: 16px;
+  text-transform: uppercase;
+  padding: 5px 0 5px 5px;
+}
+/*!***************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/.pnpm/css-loader@6.5.1_webpack@5.65.0/node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[1].use[1]!./node_modules/.pnpm/sass-loader@12.4.0_sass@1.45.0+webpack@5.65.0/node_modules/sass-loader/dist/cjs.js!./src/renderer/ui/addons/card.scss ***!
+  \***************************************************************************************************************************************************************************************************************************************************************************/
+.holy-card-container {
+  background: var(--background-secondary-alt);
+  padding: 10px;
+  border-radius: 4px;
+}
+.holy-card-container .holy-card-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+.holy-card-container .holy-card-description {
+  border-radius: 4px;
+  padding: 5px;
+  background: var(--background-secondary);
+  padding: 10px;
+  padding-bottom: 2px;
+}
+.holy-card-container .holy-card-controls {
+  display: flex;
+  align-items: center;
+  margin-left: auto;
+}
+.holy-card-container .holy-card-toolbutton-inner {
+  display: inline-flex;
+}
+
+.holy-card-field {
+  margin-right: 5px;
+}
+/*!****************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/.pnpm/css-loader@6.5.1_webpack@5.65.0/node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[1].use[1]!./node_modules/.pnpm/sass-loader@12.4.0_sass@1.45.0+webpack@5.65.0/node_modules/sass-loader/dist/cjs.js!./src/renderer/ui/addons/panel.scss ***!
+  \****************************************************************************************************************************************************************************************************************************************************************************/
+

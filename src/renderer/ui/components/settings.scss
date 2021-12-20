@@ -1,0 +1,62 @@
+.panel {
+    color: #ddd;
+
+    .title {
+        display: flex;
+        align-items: center;
+        margin-bottom: 20px;
+        font-weight: bold;
+        font-size: 20px;
+        font-weight: 600;
+        font-family: var(--font-display);
+        color: var(--header-primary);
+    }
+
+    .addons-controls {
+        display: flex;
+        align-items: center;
+        margin-bottom: 10px;
+        padding: 10px;
+        background: var(--background-secondary-alt);
+        border-radius: 4px;
+
+        .overflow-menu, .open-folder {
+            margin-left: 5px;
+        }
+
+        .addons-search {
+            flex-grow: 1;
+        }
+    }
+
+    .card-scroller {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .title-caret {
+        color: var(--text-muted);
+    }
+
+    .title-name {
+        cursor: pointer;
+        color: var(--header-secondary);
+
+        &:hover {
+            color: var(--header-primary);
+        }
+    }
+
+    .title-sub {
+        color: var(--header-primary);
+    }
+}
+
+.overflow-header {
+    font-size: 12px;
+    font-weight: 700;
+    font-family: var(--font-display);
+    line-height: 16px;
+    text-transform: uppercase;
+    padding: 5px 0 5px 5px;
+}
