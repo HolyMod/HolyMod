@@ -20,7 +20,7 @@ export default class SettingsRenderer {
         if (tab) throw new Error(`Settings tab ${id} is already registered!`);
         
         const panel = {
-            section: id,
+            section: `holy-${id}`,
             label: label,
             order: order,
             className: `holy-settings-${id}-item`,
