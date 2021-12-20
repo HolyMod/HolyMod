@@ -4,7 +4,7 @@
   "description": "A lightweight client mod focused on simplicity and performance.",
   "scripts": {
     "build-renderer": "webpack --env=mode=renderer",
-    "build-main": "webpack --env=mode=renderer",
+    "build-main": "webpack --env=mode=main",
     "build-preload": "webpack --env=mode=preload",
     "dist": "npm run build-renderer && npm run build-main && npm run build-preload"
   },
