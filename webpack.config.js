@@ -1,6 +1,7 @@
 const path = require("path");
 const CircularDependencyPlugin = require("circular-dependency-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const webpack = require("webpack");
 
 module.exports = args => {
     const {mode = "rendrer"} = args;
@@ -12,12 +13,21 @@ module.exports = args => {
         output: {
             path: path.resolve(__dirname, "dist"),
             library: {
-                type: "module"
+                type: mode === "renderer" ? "module" : "commonjs"
             },
             filename: `${mode}.js`
         },
         experiments: {
             outputModule: true
+        },
+        externals: {
+            sucrase: "sucrase",
+            sass: "sass",
+            inspector: "inspector",
+            path: "path",
+            fs: "fs",
+            module: "module",
+            electron: "electron"
         },
         module: {
             rules: [
@@ -83,7 +93,10 @@ module.exports = args => {
         },
         plugins: [
             new CircularDependencyPlugin(),
-            new MiniCssExtractPlugin()
+            new MiniCssExtractPlugin(),
+            new webpack.DefinePlugin({
+                __dirname: JSON.stringify(path.resolve(__dirname, "dist"))
+            })
         ]
     };
 }
