@@ -3,7 +3,7 @@ import IPCEvents from "../../common/ipcevents";
 import path from "path";
 
 export function getBasePath(): string {
-    return path.resolve(__dirname, "..");
+    return path.resolve(eval("__dirname"), "..");
 };
 
 export function getAppPath(): string {

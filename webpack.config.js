@@ -94,9 +94,6 @@ module.exports = args => {
         plugins: [
             new CircularDependencyPlugin(),
             new MiniCssExtractPlugin(),
-            new webpack.DefinePlugin({
-                __dirname: JSON.stringify(path.resolve(__dirname, "dist"))
-            })
         ]
     };
 }
