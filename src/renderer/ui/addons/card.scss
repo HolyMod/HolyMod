@@ -1,7 +1,11 @@
 .container {
-    background: var(--background-secondary-alt);
+    background: var(--background-tertiary);
     padding: 10px;
     border-radius: 4px;
+
+    & + .container {
+        margin-top: 20px;
+    }
 
     .header {
         display: flex;
@@ -12,7 +16,7 @@
     .description {
         border-radius: 4px;
         padding: 5px;
-        background: var(--background-secondary);
+        background: var(--background-secondary-alt);
         padding: 10px;
         padding-bottom: 2px;
     }
@@ -26,8 +30,34 @@
     .toolbutton-inner {
         display: inline-flex;
     }
+
+    .toolbutton {
+        padding: 8px;
+        border-radius: 100px;
+        margin-left: 5px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: var(--background-modifier-accent);
+
+        &:hover {
+            background: var(--background-modifier-hover);
+        }
+    }
+
+    .footer {
+        margin-top: 10px;
+
+        .controls {
+            float: right;
+        }
+    }
 }
 
 .field {
     margin-right: 5px;
+}
+
+.tooltip {
+    --background-floating: var(--background-secondary-alt);
 }

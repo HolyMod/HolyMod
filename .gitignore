@@ -1,4 +1,4 @@
 node_modules
+plugins/*
 !plugins/Test
 !plugins/.gitkeep
-plugins/*

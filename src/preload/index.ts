@@ -1,7 +1,9 @@
 import {contextBridge} from "electron";
 import LoggerModule from "../common/logger";
 import * as NativeAPI from "./api";
+import NodeModule from "module";
 
+const Module: typeof NodeModule & {globalPaths: string[]} = NodeModule as unknown as any;
 const Logger = new LoggerModule("Preload");
 
 const listeners = {};
@@ -38,8 +40,15 @@ const HolyNative = {
     }
 };
 
+// Push to globalPaths
+const nodeModulesPath = NativeAPI.Path.resolve(NativeAPI.Path.getBasePath(), "node_modules");
+if (!~Module.globalPaths.indexOf(nodeModulesPath)) {
+    Module.globalPaths.push(nodeModulesPath);
+}
+
 // Expose native apis to renderer and respect context isolation.
 Logger.log("Exposing API's");
+Object.assign(window, {HolyNative, NativeIPC, NativeAPI});
 if (process.contextIsolated) {
     contextBridge.exposeInMainWorld("HolyNative", HolyNative);
 } else {

@@ -97,6 +97,9 @@ export function createRequire(_path: string, parent: Module): Require {
 
         switch (mod) {
             case "@Holy": return (window as any).HolyAPI;
+            case "react": return HolyAPI.DiscordModules.React;
+            case "react-dom": return HolyAPI.DiscordModules.ReactDOM;
+
             default: {
                 if (mod.startsWith("@Holy/")) {
                     const value = mod.split("/").slice(1).reduce((value, key) => value[key], (window as any).HolyAPI);

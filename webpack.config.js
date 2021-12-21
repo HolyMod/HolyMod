@@ -27,7 +27,8 @@ module.exports = args => {
             path: "path",
             fs: "fs",
             module: "module",
-            electron: "electron"
+            electron: "electron",
+            "chokidar": "chokidar"
         },
         module: {
             rules: [

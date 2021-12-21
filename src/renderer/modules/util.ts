@@ -26,5 +26,56 @@ export default class Utilities {
         });
     
         return value;
-    };
+    }
+
+    static findInTree(tree = {}, filter = _ => _, {ignore = [], walkable = [], maxProperties = 100} = {}): any {
+        let stack = [tree];
+        const wrapFilter = function (...args) {
+            try { return Reflect.apply(filter, this, args); }
+            catch { return false; }
+        };
+    
+        while (stack.length && maxProperties) {
+            const node = stack.shift();
+            if (wrapFilter(node)) return node;
+            if (Array.isArray(node)) stack.push(...node);
+            else if (typeof node === "object" && node !== null) {
+                if (walkable.length) {
+                    for (const key in node) {
+                        const value = node[key];
+                        if (~walkable.indexOf(key) && !~ignore.indexOf(key)) {
+                            stack.push(value);
+                        }
+                    }
+                } else {
+                    for (const key in node) {
+                        const value = node[key];
+                        if (node && ~ignore.indexOf(key)) continue;
+    
+                        stack.push(value);
+                    }
+                }
+            }
+            maxProperties--;
+        }
+    }
+
+    static joinClassNames(...classNames: (string | [boolean, string])[]) {
+        let className = [];
+    
+        for (const item of classNames) {
+            if (typeof (item) === "string") {
+                className.push(item);
+                continue;
+            }
+    
+            if (Array.isArray(item)) {
+                const [should, name] = item;
+                if (!should) continue;
+                className.push(name);
+            }
+        }
+    
+        return className.join(" ");
+    }
 }

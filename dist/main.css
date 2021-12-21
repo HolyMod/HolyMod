@@ -18,12 +18,14 @@
   display: flex;
   align-items: center;
   margin-bottom: 10px;
-  padding: 10px;
-  background: var(--background-secondary-alt);
-  border-radius: 4px;
 }
 .holy-settings-panel .holy-settings-addons-controls .holy-settings-overflow-menu, .holy-settings-panel .holy-settings-addons-controls .holy-settings-open-folder {
   margin-left: 5px;
+}
+.holy-settings-panel .holy-settings-addons-controls .holy-settings-overflow-menu {
+  padding-right: 7px;
+  position: relative;
+  right: -1px;
 }
 .holy-settings-panel .holy-settings-addons-controls .holy-settings-addons-search {
   flex-grow: 1;
@@ -54,13 +56,26 @@
   text-transform: uppercase;
   padding: 5px 0 5px 5px;
 }
+
+.holy-settings-empty {
+  display: flex;
+  align-items: center;
+  flex-direction: column-reverse;
+}
+
+.holy-settings-search-button > div {
+  display: inline-flex;
+}
 /*!***************************************************************************************************************************************************************************************************************************************************************************!*\
   !*** css ./node_modules/.pnpm/css-loader@6.5.1_webpack@5.65.0/node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[1].use[1]!./node_modules/.pnpm/sass-loader@12.4.0_sass@1.45.0+webpack@5.65.0/node_modules/sass-loader/dist/cjs.js!./src/renderer/ui/addons/card.scss ***!
   \***************************************************************************************************************************************************************************************************************************************************************************/
 .holy-card-container {
-  background: var(--background-secondary-alt);
+  background: var(--background-tertiary);
   padding: 10px;
   border-radius: 4px;
+}
+.holy-card-container + .holy-card-container {
+  margin-top: 20px;
 }
 .holy-card-container .holy-card-header {
   display: flex;
@@ -70,7 +85,7 @@
 .holy-card-container .holy-card-description {
   border-radius: 4px;
   padding: 5px;
-  background: var(--background-secondary);
+  background: var(--background-secondary-alt);
   padding: 10px;
   padding-bottom: 2px;
 }
@@ -82,11 +97,41 @@
 .holy-card-container .holy-card-toolbutton-inner {
   display: inline-flex;
 }
+.holy-card-container .holy-card-toolbutton {
+  padding: 8px;
+  border-radius: 100px;
+  margin-left: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--background-modifier-accent);
+}
+.holy-card-container .holy-card-toolbutton:hover {
+  background: var(--background-modifier-hover);
+}
+.holy-card-container .holy-card-footer {
+  margin-top: 10px;
+}
+.holy-card-container .holy-card-footer .holy-card-controls {
+  float: right;
+}
 
 .holy-card-field {
   margin-right: 5px;
 }
+
+.holy-card-tooltip {
+  --background-floating: var(--background-secondary-alt);
+}
 /*!****************************************************************************************************************************************************************************************************************************************************************************!*\
   !*** css ./node_modules/.pnpm/css-loader@6.5.1_webpack@5.65.0/node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[1].use[1]!./node_modules/.pnpm/sass-loader@12.4.0_sass@1.45.0+webpack@5.65.0/node_modules/sass-loader/dist/cjs.js!./src/renderer/ui/addons/panel.scss ***!
   \****************************************************************************************************************************************************************************************************************************************************************************/
-
+.holy-panel-search-controls {
+  display: inline-flex;
+  padding: 7px;
+  background: var(--background-tertiary);
+  color: var(--text-muted);
+  border-radius: 4px;
+  margin-left: 5px;
+  padding-right: 0;
+}

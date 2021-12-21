@@ -5,11 +5,11 @@ declare namespace HolyAPI {
 
     export const Path: typeof import("@Holy/Path");
 
-    export const Webpack: typeof import("@Holy/Webpack");
+    export const Webpack: typeof import("@Holy/Webpack").default;
 
     export const DOM: typeof import("@Holy/DOM");
 
-    export const DiscordModules: typeof import("@Holy/DiscordModules");
+    export const DiscordModules: typeof import("@Holy/DiscordModules").default;
 
     export const Injector: typeof import("@Holy/Injector");
 
@@ -34,11 +34,17 @@ declare module "*.scss";
 
 // Plugin API
 declare module "@Holy" {
-    export {default as Webpack} from "@Holy/Webpack";
+    export const Webpack: import("@Holy/Webpack").default;
     export const FS: typeof import("@Holy/FS");
     export const Compilers: typeof import("@Holy/Compilers");
     export const Path: typeof import("@Holy/Path");
     export const Injector: typeof import("@Holy/Injector");
+    export const LoggerModule: typeof import("@Holy/LoggerModule").default;
+    export const DiscordModules: typeof import("@Holy/DiscordModules").default;
+    export const DOM: typeof import("@Holy/DOM");
+    export const ReactTools: typeof import("@Holy/ReactTools");
+    export const Zustand: typeof import("@Holy/Zustand").default;
+    export const Utilities: typeof import("@Holy/Utilities");
 
     export function unsafeExecuteJS(code: string): any;
 }
@@ -61,6 +67,15 @@ declare module "@Holy/FS" {
         isFile(): boolean;
         isDirectory(): boolean;
     };
+
+    type WatcherListener = (event: "add" | "addDir" | "change" | "unlink" | "unlinkDir", listener: (type: string, filename: string) => void) => void;
+
+    export function watch(path: string): {
+        on: WatcherListener;
+        off: WatcherListener;
+        close: () => void;
+        getWatchedPaths: () => string[];
+    };
 }
 
 declare module "@Holy/Path" {
@@ -71,6 +86,7 @@ declare module "@Holy/Path" {
     export function extname(file: string): string;
     export function basename(filePath: string): string;
     export function isAbsolute(filePath: string): boolean;
+    export function showInExplorer(path: string): void;
 }
 
 declare module "@Holy/DOM" {
@@ -96,7 +112,7 @@ declare module "@Holy/DiscordModules" {
 }
 
 declare module "@Holy/Injector" {
-    type UnpatchFunction = (types: "all" | "before" | "after") => void;
+    type UnpatchFunction = (types?: "all" | "before" | "after") => void;
 
     type ChildInjection<M> = {
         caller: string;
@@ -115,7 +131,6 @@ declare module "@Holy/Injector" {
     };
 
     type InjectorOptions<D> = {
-        caller: string,
         module: any;
         method: string;
         before?(thisObject: any, params: IArguments, res: any): any;
@@ -124,7 +139,7 @@ declare module "@Holy/Injector" {
 
     export const injections: Injection[];
 
-    export function inject(options: InjectorOptions<{}>): UnpatchFunction;
+    export function inject(options: InjectorOptions<{caller: string}>): UnpatchFunction;
 
     export function uninject(caller: string, types?: ("all" | "before" | "after")[]): void;
 
@@ -132,22 +147,49 @@ declare module "@Holy/Injector" {
 
     export function create(caller: string): {
         inject: (options: InjectorOptions<{caller?: string}>) => UnpatchFunction;
-        uninject: (caller: string, types?: ("all" | "before" | "after")[]) => void;
+        uninject: (types?: ("all" | "before" | "after")[]) => void;
         getInjectionsByCaller(): ChildInjection<any>[];
     };
+}
+
+declare module "@Holy/Utilities" {
+    export function joinClassNames(...classNames: (string | [boolean, string])[]): string;
+}
+
+declare module "@Holy/ReactTools" {
+    export function findInReactTree(tree: any, filter: (current: any) => boolean): any;
+    export function getOwnerInstance(element: Element): any;
+    export function getReactInstance(element: Element): any;
+}
+
+declare module "@Holy/Zustand" {
+    export default function createStore(state: any): any;
+}
+
+declare module "@Holy/LoggerModule" {
+    export default class Logger {
+        constructor(module: string);
+
+        log(...message: any[]): void;
+        info(...message: any[]): void;
+        warn(...message: any[]): void;
+        error(...message: any[]): void;
+        debug(...message: any[]): void;
+    }
 }
 
 declare module "@Holy/Webpack" {
     type ModuleFilter = (module: any, index?: number) => boolean;
 
-    type FindModuleOptions = {all: boolean, cache: boolean, force: boolean, default: boolean};
+    type FindModuleOptions = {all?: boolean, cache?: boolean, force?: boolean, default?: boolean};
 
     export default class Webpack {
         whenReady: Promise<void>
         get Filters(): {
             byProps(...props: string[]): ModuleFilter;
             byDisplayName(name: string, def?: boolean): ModuleFilter;
-            byTypeString(...strings: []): ModuleFilter
+            byTypeString(...strings: []): ModuleFilter;
+            byProtos(...protos: string[]): ModuleFilter;
         }
 
         /**

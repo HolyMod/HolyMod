@@ -22,6 +22,10 @@ export class Filters {
     static byTypeString(...strings: string[]) {
         return (module: any) => module.type && (module = module.type?.toString()) && strings.every(str => module.indexOf(str) > -1);
     }
+
+    static byProtos(...protos: string[]) {
+        return (module: any) => typeof module === "function" && protos.every(proto => proto in module.prototype);
+    }
 }
 
 export type ModuleFilter = (module: any, index: number) => boolean;

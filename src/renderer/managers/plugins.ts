@@ -38,7 +38,19 @@ const PluginsManager = new class PluginsManager extends Store {
             })
         });
 
+        this.watchFolder();
         this.loadAllPlugins();
+    }
+
+    watchFolder(): void {
+        const watcher = FS.watch(this.folder);
+
+        watcher.on("change", (filename) => {
+            const [, addon] = filename.replace(this.folder, "").split(/\\|\//);
+
+            if (!this.plugins.has(addon)) this.loadPlugin(Path.resolve(this.folder, addon));
+            else this.reloadPlugin(addon);
+        });
     }
 
     resolve(pluginOrId: any): any {
@@ -63,7 +75,7 @@ const PluginsManager = new class PluginsManager extends Store {
         }
 
         const found = this.extensions.find(ext => FS.exists(Path.resolve(filepath, "index" + ext)));
-        if (found) return found;
+        if (found) return Path.resolve(filepath, "index" + found);
 
         Logger.error(`Failed to get entry file for ${filename}:`, new Error("Could not resolve entry file."));
         return null;

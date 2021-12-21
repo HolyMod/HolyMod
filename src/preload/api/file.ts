@@ -1,4 +1,5 @@
 import fs from "fs";
+import * as Chokidar from "chokidar";
 
 export function readFile(path: string, options: string = "utf8"): string {
     return fs.readFileSync(path, options as "utf8");
@@ -38,4 +39,38 @@ export function getStats(path: string): {
         isFile: () => stats.isFile(),
         isDirectory: () => stats.isDirectory()
     };
+};
+
+export function watch(path: string) {
+    const listeners = {};
+    const watcher = Chokidar.watch(path, {ignored: /node_modules/i});
+
+    const initializeListener = function (event: string) {
+        listeners[event] = new Set();
+
+        watcher.on(event, (...args) => {
+            const callbacks = [...listeners[event]];
+
+            for (let i = 0; i < callbacks.length; i++) {
+                try {callbacks[i](...args);}
+                catch (error) {console.error(error);}
+            }
+        });
+    };
+
+    const data = {
+        close: () => watcher.close(),
+        on: (event: string, listener: Function) => {
+            if (!listeners[event]) initializeListener(event);
+
+            listeners[event].add(listener);
+        },
+        off: (event: string, listener: Function) => {
+            if (!listeners[event]) return;
+
+            listeners[event].delete(listener);
+        }
+    };
+
+    return data;
 };

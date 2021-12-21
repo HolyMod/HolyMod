@@ -1,3 +1,5 @@
 {
-	"Test": true
+	"Test": true,
+	"BadgesEverywhere": true,
+	"VoiceChatView": true
 }

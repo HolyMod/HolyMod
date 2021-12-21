@@ -3,11 +3,13 @@ import DiscordIcon from "@ui/components/discordicon";
 import {SettingsContext} from "../components/settings";
 import "./card.scss";
 
+const {Path} = HolyAPI;
+
 export function ToolButton({label, icon, onClick, danger = false, disabled = false}) {
     const {Button, Tooltips: {Tooltip}} = DiscordModules;
 
     return (
-        <Tooltip text={label} position="top">
+        <Tooltip text={label} position="top" tooltipClassName="holy-card-tooltip">
             {props => (
                 <Button
                     {...props}
@@ -18,7 +20,7 @@ export function ToolButton({label, icon, onClick, danger = false, disabled = fal
                     onClick={onClick}
                     disabled={disabled}
                 >
-                    <DiscordIcon name={icon} color={danger ? "#ed4245" : void 0} width="24" height="24" />
+                    <DiscordIcon name={icon} color={danger ? "#ed4245" : void 0} width="20" height="20" />
                 </Button>
             )}
         </Tooltip>
@@ -73,6 +75,18 @@ export default function AddonCard({addon, manager, toggle, isEnabled}) {
                 {"version" in addon.manifest && <div className="holy-card-field">v{addon.manifest.version}</div>}
                 {"author" in addon.manifest && <div className="holy-card-field"> by {addon.manifest.author}</div>}
                 <div className="holy-card-controls">
+                    <ButtonWrapper value={isEnabled?.(addon) ?? false} onChange={() => {
+                        toggle(addon);
+                    }} />
+                </div>
+            </div>
+            {addon.manifest.description && (
+                <div className="holy-card-description">
+                    <Markdown>{addon.manifest.description}</Markdown>
+                </div>
+            )}
+            <div className="holy-card-footer">
+                <div className="holy-card-controls">
                     {/* {getPanel(addon.entityID) && <ToolButton
                         label="Settings"
                         icon="Gear"
@@ -88,27 +102,17 @@ export default function AddonCard({addon, manager, toggle, isEnabled}) {
                         }}
                     />} */}
                     <ToolButton label="Reload" icon="Replay" disabled={!manager.isEnabled?.(addon) ?? true} onClick={() => manager.reload(addon)} />
-                    <ToolButton label="Open Path" icon="Folder" onClick={() => {
-                        // PCCompatNative.executeJS(`require("electron").shell.showItemInFolder(${JSON.stringify(addon.path)})`);
-                    }} />
-                    <ToolButton label="Delete" icon="Trash" onClick={() => {
+                    <ToolButton label="Open Path" icon="Folder" onClick={() => Path.showInExplorer(addon.path)} />
+                    {/* <ToolButton label="Delete" icon="Trash" onClick={() => {
                         // Modals.showConfirmationModal("Are you sure?", `Are you sure that you want to delete the ${type} "${addon.manifest.name}"?`, {
                         //     danger: true,
                         //     onConfirm: () => {
                         //         manager.delete(addon.entityID)
                         //     }
                         // });
-                    }} />
-                    <ButtonWrapper value={isEnabled?.(addon) ?? false} onChange={() => {
-                        toggle(addon);
-                    }} />
+                    }} /> */}
                 </div>
             </div>
-            {addon.manifest.description && (
-                <div className="holy-card-description">
-                    <Markdown>{addon.manifest.description}</Markdown>
-                </div>
-            )}
         </div>
     );
 }

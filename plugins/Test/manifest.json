@@ -1,0 +1,7 @@
+{
+    "name": "Test",
+    "author": "Strencher",
+    "version": "1.0.0",
+    "description": "Holymod testplugin",
+    "entry": "./index.ts"
+}

@@ -4,6 +4,8 @@ import DiscordIcon from "@ui/components/discordicon";
 import AddonCard from "./card";
 import "./panel.scss";
 
+const {Path} = HolyAPI;
+
 export type SearchOptions = {
     description: boolean;
     author: boolean;
@@ -118,7 +120,7 @@ export function OverflowContextMenu({type: addonType}) {
 };
 
 export default function AddonPanel({addons: ManagerAddons, isEnabled, toggle, type, manager}) {
-    const {React, Button, ContextMenu, Tooltips, SearchBar, PlaceholderClasses, LocaleManager} = DiscordModules;
+    const {React, Button, ContextMenu, Tooltips, SearchBar, PlaceholderClasses, LocaleManager, Popout} = DiscordModules;
 
     const [query, setQuery] = React.useState("");
     const [addons, setAddons] = React.useState(null);
@@ -152,40 +154,50 @@ export default function AddonPanel({addons: ManagerAddons, isEnabled, toggle, ty
                     onQueryChange={(value) => setQuery(value)}
                     onClear={() => setQuery("")}
                     placeholder={`Search ${type}...`}
-                    size={SearchBar.Sizes.SMALL}
+                    size={SearchBar.Sizes.MEDIUM}
                     query={query}
                     className="holy-settings-addons-search"
                 />
-                <Tooltips.Tooltip text="Open folder" position="bottom">
-                    {props => (
-                        <Button
-                            {...props}
-                            size={Button.Sizes.NONE}
-                            look={Button.Looks.BLANK}
-                            className="holy-settings-open-folder"
-                            onClick={() => null /* PCCompatNative.executeJS(`require("electron").shell.openPath('${JSON.stringify(manager.folder)}')`) */}
-                        >
-                            <DiscordIcon name="Folder" />
-                        </Button>
-                    )}
-                </Tooltips.Tooltip>
-                <Tooltips.Tooltip text="Options" position="bottom">
-                    {props => (
-                        <Button
-                            {...props}
-                            size={Button.Sizes.NONE}
-                            look={Button.Looks.BLANK}
-                            className="holy-settings-overflow-menu"
-                            onClick={e => {
-                                ContextMenu.open(e, () => (
+                <div className="holy-panel-search-controls">
+                    <Tooltips.Tooltip text="Open folder" position="bottom" spacing={14}>
+                        {props => (
+                            <Button
+                                {...props}
+                                size={Button.Sizes.NONE}
+                                look={Button.Looks.BLANK}
+                                className="holy-settings-open-folder holy-settings-search-button"
+                                onClick={() => Path.showInExplorer(manager.folder)}
+                            >
+                                <DiscordIcon name="Folder" width="20" height="20" />
+                            </Button>
+                        )}
+                    </Tooltips.Tooltip>
+                    <Tooltips.Tooltip text="Options" position="bottom" spacing={14}>
+                        {props => (
+                            <Popout
+                                position={Popout.Positions.TOP}
+                                animation={Popout.Animation.SCALE}
+                                align={Popout.Align.RIGHT}
+                                spacing={12}
+                                renderPopout={() => (
                                     <OverflowContextMenu type={type} />
-                                ));
-                            }}
-                        >
-                            <DiscordIcon name="OverflowMenu" />
-                        </Button>
-                    )}
-                </Tooltips.Tooltip>
+                                )}
+                            >
+                                {popoutProps => (
+                                    <Button
+                                        {...props}
+                                        {...popoutProps}
+                                        size={Button.Sizes.NONE}
+                                        look={Button.Looks.BLANK}
+                                        className="holy-settings-overflow-menu holy-settings-search-button"
+                                    >
+                                        <DiscordIcon name="OverflowMenu" width="20" height="20" />
+                                    </Button>
+                                )}
+                            </Popout>
+                        )}
+                    </Tooltips.Tooltip>
+                </div>
             </div>
             <div className="holy-settings-card-scroller">
                 {addons?.length

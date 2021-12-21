@@ -57,6 +57,24 @@ export default {
     SelectedChannelStore: {
         props: ["_dispatchToken", "getChannelId", "getLastSelectedChannelId"]
     },
+    ChannelStore: {
+        props: ["_dispatchToken", "getDMFromUserId"]
+    },
+    ChannelsStore: {
+        props: ["_dispatchToken", "getMutableGuildChannels"]
+    },
+    GuildStore: {
+        props: ["_dispatchToken", "getGuild"]
+    },
+    UserStore: {
+        props: ["_dispatchToken", "getUser", "getCurrentUser"]
+    },
+    GuildMemberStore: {
+        props: ["_dispatchToken", "getMember"]
+    },
+    UserProfileStore: {
+        props: ["_dispatchToken", "getUserProfile"]
+    },
     // Components
     ModalComponents: {
         props: ["ModalRoot", "ModalHeader"]
@@ -119,6 +137,9 @@ export default {
     },
     Scrollers: {
         props: ["ScrollerAuto", "ScrollerThin", "default"]
+    },
+    Popout: {
+        name: "Popout"
     },
     // Classes
     Margins: {

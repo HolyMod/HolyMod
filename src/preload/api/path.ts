@@ -1,6 +1,7 @@
-import {ipcRenderer as IPC} from "electron";
+import {ipcRenderer as IPC, shell} from "electron";
 import IPCEvents from "../../common/ipcevents";
 import path from "path";
+import fs from "fs";
 
 export function getBasePath(): string {
     return path.resolve(eval("__dirname"), "..");
@@ -28,4 +29,10 @@ export function basename(filePath: string): string {
 
 export function isAbsolute(filePath: string): boolean {
     return path.isAbsolute(filePath);
+};
+
+export function showInExplorer(path: string) {
+    if (!fs.existsSync(path)) return false;
+
+    shell.showItemInFolder(path);
 };

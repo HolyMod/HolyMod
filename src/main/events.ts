@@ -63,8 +63,7 @@ export default class Events {
             let css = "";
 
             try {
-                const filecontent = fs.readFileSync(filePath, "utf8");
-                ({css} = sass.compile(filecontent, {}));
+                ({css} = sass.compile(filePath, {}));
             } catch (error) {
                 log("Failed to compile SCSS:", error);
             }
