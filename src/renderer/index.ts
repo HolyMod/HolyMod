@@ -17,7 +17,7 @@ export default new class HolyMod {
         this.injectStyles();
 
         Object.assign(window, {
-            require: Require,
+            holy_require: Require,
             React: DiscordModules.React,
             ReactDOM: DiscordModules.ReactDOM
         });
@@ -26,6 +26,7 @@ export default new class HolyMod {
 
         Storage.initialize();
         Plugins.initialize();
+        Themes.initialize();
     }
 
     injectStyles(): void {

@@ -205,9 +205,7 @@ export default function AddonPanel({addons: ManagerAddons, isEnabled, toggle, ty
                         addon={addon}
                         // hasSettings={false}
                         manager={manager}
-                        type={type}
                         key={addon.manifest.name}
-                        openSettings={() => {}}
                         isEnabled={isEnabled}
                         toggle={toggle}
                     />)

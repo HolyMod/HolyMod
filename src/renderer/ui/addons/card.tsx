@@ -1,3 +1,4 @@
+import SettingsStore, {SettingsEvents} from "@classes/settings";
 import DiscordModules from "@modules/discord";
 import DiscordIcon from "@ui/components/discordicon";
 import {SettingsContext} from "../components/settings";
@@ -59,6 +60,18 @@ export default function AddonCard({addon, manager, toggle, isEnabled}) {
     const {Markdown} = DiscordModules;
     const [, forceUpdate] = React.useReducer(n => n + 1, 0);
     const SettingsApi = React.useContext<any>(SettingsContext);
+    const Settings = SettingsStore.getSettings(addon.id);
+
+    React.useEffect(() => {
+        if (!Settings) return;
+
+        const handler = () => forceUpdate();
+        Settings.on(SettingsEvents.SETTINGS_MOUNT_CHANGE, handler);
+
+        return () => {
+            Settings.off(SettingsEvents.SETTINGS_MOUNT_CHANGE, handler);
+        };
+    }, [Settings]);
 
     React.useEffect(() => {
         manager.on("toggle", (name: string) => {
@@ -87,21 +100,21 @@ export default function AddonCard({addon, manager, toggle, isEnabled}) {
             )}
             <div className="holy-card-footer">
                 <div className="holy-card-controls">
-                    {/* {getPanel(addon.entityID) && <ToolButton
+                    {SettingsStore.hasPanel(addon.id) && <ToolButton
                         label="Settings"
                         icon="Gear"
                         onClick={() => {
-                            const Settings = getPanel(addon.entityID);
+                            const Render = SettingsStore.getPanel(addon.id);
 
                             SettingsApi.setPage({
                                 label: addon.manifest.name,
-                                render: typeof(Settings.render) === "function"
-                                    ? (() => DiscordModules.React.createElement(Settings.render, cache.get(addon.entityID).makeProps()))
-                                    : Settings.render
+                                render: typeof(Render) === "function"
+                                    ? (() => DiscordModules.React.createElement(Render, SettingsStore.getSettings(addon.id)))
+                                    : Render
                             });
                         }}
-                    />} */}
-                    <ToolButton label="Reload" icon="Replay" disabled={!manager.isEnabled?.(addon) ?? true} onClick={() => manager.reload(addon)} />
+                    />}
+                    <ToolButton label="Reload" icon="Replay" disabled={!isEnabled(addon) ?? true} onClick={() => manager.reload(addon)} />
                     <ToolButton label="Open Path" icon="Folder" onClick={() => Path.showInExplorer(addon.path)} />
                     {/* <ToolButton label="Delete" icon="Trash" onClick={() => {
                         // Modals.showConfirmationModal("Are you sure?", `Are you sure that you want to delete the ${type} "${addon.manifest.name}"?`, {

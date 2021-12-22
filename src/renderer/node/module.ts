@@ -92,16 +92,31 @@ export type Require = CallableFunction & {
 };
 
 export function createRequire(_path: string, parent: Module): Require {
+    let API, isPlugin = false;
+    
+    if (_path.startsWith(HolyAPI.Plugins?.folder)) {
+        const [, addon] = _path.replace(HolyAPI.Plugins.folder, "").split(/\\|\//);
+
+        API = HolyAPI.makePluginAPI(addon);
+        isPlugin = true;
+    }
+
     const require = (mod: string) => {
         if (typeof (mod) !== "string") return;
 
         switch (mod) {
-            case "@Holy": return (window as any).HolyAPI;
+            case "@Holy": {
+                if (isPlugin) return Object.assign({}, HolyAPI, API);
+
+                return HolyAPI;
+            };
             case "react": return HolyAPI.DiscordModules.React;
             case "react-dom": return HolyAPI.DiscordModules.ReactDOM;
 
             default: {
                 if (mod.startsWith("@Holy/")) {
+                    if (mod === "@Holy/Settings" && isPlugin) return API;
+
                     const value = mod.split("/").slice(1).reduce((value, key) => value[key], (window as any).HolyAPI);
                     if (value) return value;
                 }

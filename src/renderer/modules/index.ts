@@ -8,3 +8,6 @@ export {default as DOM} from "./dom";
 export {default as LoggerModule} from "@common/logger";
 export {default as ReactTools} from "./reacttools";
 export {default as Zustand} from "./zustand";
+export {default as SettingsStore} from "../classes/settings";
+export {default as makePluginAPI} from "./pluginapi";
+export {default as Modals} from "@ui/modals";

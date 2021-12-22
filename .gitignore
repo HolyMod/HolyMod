@@ -1,6 +1,9 @@
 node_modules
-plugins/*
 config/*
+plugins/*
 !plugins/Test
 !plugins/.gitkeep
 !config/.gitkeep
+themes/*
+!themes/Test
+!themes/.gitkeep

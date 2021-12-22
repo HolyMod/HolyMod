@@ -13,7 +13,24 @@ declare namespace HolyAPI {
 
     export const Injector: typeof import("@Holy/Injector");
 
+    export const Storage: typeof import("@Holy/Storage");
+    
+    export const Plugins: typeof import("@Holy/Plugins").default;
+
+    export const Themes: typeof import("@Holy/Themes").default;
+
+    export const SettingsStore: import("@classes/settings").default;
+    export const Modals: typeof import("@ui/modals").default
+    /**
+     * Only for plugins, will have everything bound to the plugin id.
+     */
+    export const Settings: import("@classes/settings").default;
+
     export const unsafeExecuteJS: typeof import("@Holy").unsafeExecuteJS;
+
+    export function makePluginAPI(plugin: string): {
+        Settings: typeof Settings
+    };
 }
 
 declare namespace HolyIPC {
@@ -45,8 +62,36 @@ declare module "@Holy" {
     export const ReactTools: typeof import("@Holy/ReactTools");
     export const Zustand: typeof import("@Holy/Zustand").default;
     export const Utilities: typeof import("@Holy/Utilities");
-
+    export const Storage: typeof import("@Holy/Storage");
+    export const SettingsStore: import("@classes/settings").default;
+    export const Modals: typeof import("@ui/modals").default
+    /**
+     * Only for plugins, will have everything bound to the plugin id.
+     */
+    export const Settings: import("@classes/settings").default;
     export function unsafeExecuteJS(code: string): any;
+}
+
+declare module "@Holy/Modals" {
+    const Modals: typeof import("@ui/modals").default;
+    
+    export default Modals;
+}
+
+declare module "@Holy/Settings" {
+    const Settings: import("@classes/settings").default;
+
+    export default Settings;
+}
+
+declare module "@Holy/Plugins" {
+    const Plugins: typeof import("./src/renderer/managers/plugins").default;
+    export default Plugins;
+}
+
+declare module "@Holy/Themes" {
+    const Plugins: typeof import("./src/renderer/managers/themes").default;
+    export default Plugins;
 }
 
 declare module "@Holy/Compilers" {
@@ -103,6 +148,11 @@ declare module "@Holy/DOM" {
     export function injectCSS(id: string, cssOrURL: string, options?: {type: "PLAIN" | "URL", documentHead?: boolean}): HTMLElement;
 
     export function injectJS(id: string, url: string, options?: {documentHead: boolean}): Promise<any>;
+}
+
+declare module "@Holy/Storage" {
+    export function get(id: string, def: any): any;
+    export function set(id: string, value: any, emit?: boolean): void;
 }
 
 declare module "@Holy/DiscordModules" {

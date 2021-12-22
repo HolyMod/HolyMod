@@ -1,0 +1,7 @@
+{
+    "name": "Red Guilds",
+    "version": "1.0.0",
+    "author": "Strencher",
+    "description": "Holymod example theme.",
+    "entry": "./index.scss"
+}
