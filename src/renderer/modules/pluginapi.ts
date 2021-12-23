@@ -6,7 +6,7 @@ export default function makePluginAPI(plugin: string) {
     if (cache.has(plugin)) return cache.get(plugin);
 
     const API = {
-        Settings: new SettingsStore(plugin),
+        Settings: new SettingsStore(plugin)
     };
 
     cache.set(plugin, API);

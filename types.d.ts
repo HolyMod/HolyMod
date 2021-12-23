@@ -51,7 +51,7 @@ declare module "*.scss";
 
 // Plugin API
 declare module "@Holy" {
-    export const Webpack: import("@Holy/Webpack").default;
+    export const Webpack: typeof import("@Holy/Webpack").default;
     export const FS: typeof import("@Holy/FS");
     export const Compilers: typeof import("@Holy/Compilers");
     export const Path: typeof import("@Holy/Path");
@@ -233,7 +233,7 @@ declare module "@Holy/Webpack" {
 
     type FindModuleOptions = {all?: boolean, cache?: boolean, force?: boolean, default?: boolean};
 
-    export default class Webpack {
+    export class WebpackModule {
         whenReady: Promise<void>
         get Filters(): {
             byProps(...props: string[]): ModuleFilter;
@@ -301,4 +301,7 @@ declare module "@Holy/Webpack" {
          */
         get waitForGlobal(): Promise<void>;
     }
+
+    const Webpack: WebpackModule;
+    export default Webpack;
 }

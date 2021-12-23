@@ -62,6 +62,10 @@ export default class SettingsStore extends Store {
         this.emit(SettingsEvents.SETTINGS_MOUNT_CHANGE);
     }
 
+    useSettings(factory?: () => any) {
+        return this.useEvent(SettingsEvents.SETTINGS_UPDATE, factory);
+    }
+
     static makeSettings(id: string) {
         if (cache.has(id)) return cache.get(id);
         
