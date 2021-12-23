@@ -98,6 +98,7 @@ declare module "@Holy/Compilers" {
     export function compileJS(path: string): string;
     export function compileTS(path: string): string;
     export function compileSCSS(path: string): string;
+    export function compileCOFFEE(path: string): string;
 }
 
 declare module "@Holy/FS" {

@@ -20,6 +20,11 @@ export const extensions = {
         module._compile(filecontent);
         return module.exports;
     }),
+    ...createBindings([".mcoffee", ".coffee", ".litcoffee"], (module: Module, filename: string) => {
+        const filecontent = Compilers.compileCOFFEE(filename);
+        module._compile(filecontent);
+        return module.exports;
+    }),
     ".json": (module: Module, filename: string) => {
         const filecontent = FS.readFile(filename, "utf8");
         module.exports = JSON.parse(filecontent);
@@ -93,7 +98,7 @@ export type Require = CallableFunction & {
 
 export function createRequire(_path: string, parent: Module): Require {
     let API, isPlugin = false;
-    
+
     if (_path.startsWith(HolyAPI.Plugins?.folder)) {
         const [, addon] = _path.replace(HolyAPI.Plugins.folder, "").split(/\\|\//);
 

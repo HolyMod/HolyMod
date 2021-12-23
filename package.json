@@ -34,6 +34,7 @@
   "dependencies": {
     "@swc/core": "^1.2.111",
     "chokidar": "^3.5.2",
+    "coffeescript": "^2.6.1",
     "sass": "^1.43.4",
     "sucrase": "^3.20.3"
   }

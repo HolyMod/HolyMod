@@ -12,3 +12,7 @@ export function compileTS(path: string): string {
 export function compileSCSS(path: string): string {
     return IPC.sendSync(IPCEvents.COMPILE_SCSS, path);
 };
+
+export function compileCOFFEE(path: string): string {
+    return IPC.sendSync(IPCEvents.COMPILE_COFFEESCRIPT, path);
+};

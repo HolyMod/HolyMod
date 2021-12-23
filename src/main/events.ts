@@ -17,6 +17,7 @@ export default class Events {
         log("[Compilers] loading.");
         const sucrase = await import("sucrase");
         const sass = await import("sass");
+        const CoffeeScript = await import("coffeescript");
 
         IPC.on(IPCEvents.COMPILE_JAVASCRIPT, (event, filePath: string) => {
             if (!fs.existsSync(filePath) || !fs.statSync(filePath).isFile()) {
@@ -69,6 +70,24 @@ export default class Events {
             }
 
             event.returnValue = css.toString();
+        });
+
+        IPC.on(IPCEvents.COMPILE_COFFEESCRIPT, (event, filePath: string) => {
+            if (!fs.existsSync(filePath) || !fs.statSync(filePath).isFile()) {
+                return event.returnValue = "ERROR: File not found";
+            }
+            let code = "";
+
+            try {
+                const filecontent = fs.readFileSync(filePath, "utf8");
+                ({code} = sucrase.transform(CoffeeScript.compile(filecontent), {
+                    transforms: ["jsx"]
+                }));
+            } catch (error) {
+                log("Failed to compile CoffeeScript:", error);
+            }
+
+            event.returnValue = code;
         });
     }
 }

@@ -28,7 +28,8 @@ module.exports = args => {
             fs: "fs",
             module: "module",
             electron: "electron",
-            "chokidar": "chokidar"
+            chokidar: "chokidar",
+            coffeescript: "coffeescript"
         },
         module: {
             rules: [

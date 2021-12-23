@@ -10,6 +10,7 @@ specifiers:
   '@types/react-dom': ^17.0.11
   chokidar: ^3.5.2
   circular-dependency-plugin: ^5.2.2
+  coffeescript: ^2.6.1
   css-loader: ^6.5.1
   esformatter-quotes: ^1.1.0
   mini-css-extract-plugin: ^2.4.5
@@ -27,6 +28,7 @@ specifiers:
 dependencies:
   '@swc/core': 1.2.121
   chokidar: 3.5.2
+  coffeescript: 2.6.1
   sass: 1.45.0
   sucrase: 3.20.3
 
@@ -692,6 +694,12 @@ packages:
       kind-of: 6.0.3
       shallow-clone: 3.0.1
     dev: true
+
+  /coffeescript/2.6.1:
+    resolution: {integrity: sha512-GG5nkF93qII8HmHqnnibkgpp/SV7PSnSPiWsbinwya7nNOe95aE/x2xrKZJFks8Qpko3TNrC+/LahaKgrz5YCg==}
+    engines: {node: '>=6'}
+    hasBin: true
+    dev: false
 
   /color-convert/2.0.1:
     resolution: {integrity: sha512-RRECPsj7iu/xb5oKYcsFHSppFNnsj/52OVTRKb4zP5onXwVF3zVmmToNcOfGC+CRDpfK/U584fMg38ZHCaElKQ==}
