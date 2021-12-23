@@ -81,7 +81,7 @@ export default class Events {
             try {
                 const filecontent = fs.readFileSync(filePath, "utf8");
                 ({code} = sucrase.transform(CoffeeScript.compile(filecontent), {
-                    transforms: ["jsx"]
+                    transforms: ["jsx", "imports"]
                 }));
             } catch (error) {
                 log("Failed to compile CoffeeScript:", error);
