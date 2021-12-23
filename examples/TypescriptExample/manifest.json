@@ -1,0 +1,7 @@
+{
+    "name": "TypescriptExample",
+    "author": "Strencher",
+    "version": "1.0.0",
+    "description": "Holymod typescript testplugin",
+    "entry": "./index.tsx"
+}

@@ -1,0 +1,7 @@
+{
+    "name": "CoffeeExample",
+    "author": "Strencher",
+    "version": "1.0.0",
+    "description": "Holymod coffeescript testplugin",
+    "entry": "./index.coffee"
+}

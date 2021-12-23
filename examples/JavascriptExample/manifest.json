@@ -1,0 +1,7 @@
+{
+    "name": "JavascriptExample",
+    "author": "Strencher",
+    "version": "1.0.0",
+    "description": "Holymod javascript testplugin",
+    "entry": "./index.jsx"
+}
