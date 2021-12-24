@@ -49,7 +49,7 @@ const PluginsManager = new class PluginsManager extends Store {
             const [, addon] = filename.replace(this.folder, "").split(/\\|\//);
 
             if (!this.plugins.has(addon)) this.loadPlugin(Path.resolve(this.folder, addon));
-            else this.reloadPlugin(addon);
+            else if (Require.resolve(filename)) this.reloadPlugin(addon);
         });
     }
 
@@ -126,6 +126,7 @@ const PluginsManager = new class PluginsManager extends Store {
             this.clearCache(filename);
             const partialExports = Require(entryFile); 
             exports = partialExports.__esModule ? partialExports.default : partialExports;
+            if (!exports.prototype) return;
 
             Utilities.assign(exports.prototype, {
                 manifest: Object.freeze(manifest),

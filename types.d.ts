@@ -27,6 +27,8 @@ declare namespace HolyAPI {
     export const Settings: import("@classes/settings").default;
 
     export const unsafeExecuteJS: typeof import("@Holy").unsafeExecuteJS;
+    
+    export const toggleDevTools: typeof import("@Holy").toggleDevTools;
 
     export function makePluginAPI(plugin: string): {
         Settings: typeof Settings
@@ -70,6 +72,7 @@ declare module "@Holy" {
      */
     export const Settings: import("@classes/settings").default;
     export function unsafeExecuteJS(code: string): any;
+    export function toggleDevTools(): void;
 }
 
 declare module "@Holy/Modals" {

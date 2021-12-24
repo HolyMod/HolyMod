@@ -7,9 +7,16 @@ const log = console.log.bind(null, "[Holymod]");
 export default class Events {
     static register(): void {
         this.registerCompilers();
+        this.registerAPI();
 
         IPC.on(IPCEvents.GET_APP_PATH, (event) => {
             event.returnValue = app.getAppPath();
+        });
+    }
+
+    static registerAPI(): void {
+        IPC.handle(IPCEvents.TOGGLE_DEV_TOOLS, (event) => {
+            event.sender.toggleDevTools();
         });
     }
 
