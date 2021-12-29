@@ -13,7 +13,7 @@
 * Enjoy.
 
 # Installing plugins and themes
-* Git clone the plugin/theme inside your `plugins` folder.
+* Git clone the plugin/theme inside your `plugins` / `themes` folder.
 * If a plugin requires you to, reload your client via `Ctrl + R` / `Cmd + R`
 
 # Creating plugins and themes
