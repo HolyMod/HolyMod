@@ -191,11 +191,11 @@ const PluginsManager = new class PluginsManager extends Store {
         try {
             if (typeof plugin.onStop === "function") plugin.onStop();
         } catch (error) {
-            Logger.error(`Failed to stop ${plugin.manifest.name}:`, error);
+            Logger.error(`Failed to stop ${plugin.displayName}:`, error);
             return false;
         } finally {
             if (log) {
-                Logger.log(`${plugin.manifest.name} was stopped!`);
+                Logger.log(`${plugin.displayName} was stopped!`);
             }
 
             return true;

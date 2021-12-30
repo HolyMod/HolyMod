@@ -78,4 +78,16 @@ export default class Utilities {
     
         return className.join(" ");
     }
+
+    static async waitUntil<T = any>(factory: () => T): Promise<T> {
+        let current = await factory();
+
+        do {
+            await new Promise(resolve => setTimeout(resolve, 0));
+            
+            current = await factory();
+        } while (!current);
+
+        return current;
+    }
 }

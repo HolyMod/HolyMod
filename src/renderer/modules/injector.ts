@@ -1,6 +1,26 @@
 import LoggerModule from "../../common/logger";
 
 const Logger = new LoggerModule("Injector");
+const patchTypes = ["after", "before"];
+enum argMap {
+    caller,
+    module,
+    method,
+    patch,
+    extraOptions
+};
+
+type CallbackMap = Map<string, Function>;
+
+type Injection = {
+    module: any;
+    method: string;
+    originalMethod(): any;
+    isEmpty(): boolean;
+    afterCallbacks: CallbackMap;
+    beforeCallbacks: CallbackMap;
+    revert(): void;
+};
 
 /**@module Injector */
 
@@ -33,7 +53,7 @@ const Logger = new LoggerModule("Injector");
  * @type {Array<Injection>}
 
  */
-export const injections = [];
+export const injections: Injection[] = [];
 
 /**
  * Checks the arguments for the **inject** function.
@@ -42,13 +62,44 @@ export const injections = [];
  
  * @private Should only be used by the injector itself.
  */
-export function validateOptions(options) {
+export function validateOptions(...options: any) {
+    if (arguments.length > 2) {
+        if (typeof options[0] === "object" || options[0] != null || !Array.isArray(options[0])) options = Object.assign({}, options[0]);
+        else options = {};
+
+        let extraOptions = {type: "after"};
+
+        for (let i = 0; i < arguments.length; i++) {
+            const key = argMap[i];
+
+            if (key === "extraOptions") extraOptions = arguments[i];
+            else if (key && options[key] == null) options[key] = arguments[i];
+        }
+
+        switch (extraOptions.type) {
+            case "before": {
+                options.before = options.patch;
+            } break;
+            case "after": {
+                options.after = options.patch;
+            } break;
+
+            default: {
+                throw new Error("Could not identify patch type!");
+            }
+        }
+    } else {
+        options = Object.assign({}, ...[...arguments].flat());
+    }
+
     if (typeof options.caller !== "string") throw new Error("No caller for injection specified!");
     if (typeof options.module === "undefined") throw new Error("No module to injection specified!");
     if (typeof options.method === "undefined") throw new Error("No injection method specified!");
     if (typeof options.module[options.method] !== "function") throw new Error(`Method '${options.method}' appears to be '${typeof options.module[options.method]}' instead of 'function'!`);
-    if (Object.isFrozen(options.module)) throw new Error("Module appears to be readonly! Cannot injection into it.");
-    if (!["before", "after"].some(opt => typeof options[opt] === "function")) throw new Error("No inject type specified!");
+    if (Object.isFrozen(options.module)) throw new Error("Module appears to be readonly! Cannot inject into it.");
+    if (!patchTypes.some(opt => typeof options[opt] === "function")) throw new Error("No inject type specified!");
+
+    return options;
 };
 
 /**
@@ -58,13 +109,15 @@ export function validateOptions(options) {
  * @returns {Injection}
  
  */
-export function createInjection(module, method) {
-    const originalMethod = module[method];
-    const injection = {
+export function createInjection(module: any, method: any) {
+    const originalMethod: Function = module[method];
+    const injection: Injection = {
         module,
         method,
         originalMethod: module[method],
-        children: [],
+        afterCallbacks: new Map,
+        beforeCallbacks: new Map,
+        isEmpty() {return this.afterCallbacks.size === 0 && this.beforeCallbacks.size === 0;},
         revert: () => {
             const index = injections.indexOf(injection);
             if (index < 0) return false;
@@ -74,21 +127,23 @@ export function createInjection(module, method) {
     }
 
     module[method] = function (...params) {
-        if (!injection.children.length) {
+        if (injection.isEmpty()) {
             injection.revert();
             return originalMethod.apply(this, arguments);
         }
 
-        const before = injection.children.filter(child => typeof child.before === "function" && !child.cancelBefore);
-        const after = injection.children.filter(child => typeof child.after === "function" && !child.cancelAfter);
+        const before = [...injection.beforeCallbacks];
+        const after = [...injection.afterCallbacks];
         let returnValue = params;
 
-        for (const injection of before) {
+        for (let i = 0; i < before.length; i++) {
+            const [caller, patch] = before[i];
+
             try {
-                const tempReturn = injection.before(this, returnValue);
+                const tempReturn = patch.call(this, this, returnValue);
                 if (Array.isArray(tempReturn)) returnValue = tempReturn;
-            } catch (exception) {
-                Logger.error(`Failed to run before injection for ${injection.caller}:\n`, exception);
+            } catch (error) {
+                Logger.error(`Failed to run before injection for ${caller}:\n`, error);
             }
         }
 
@@ -96,17 +151,20 @@ export function createInjection(module, method) {
 
         returnValue = originalMethod.apply(this, params);
 
-        for (const injection of after) {
+        for (let i = 0; i < after.length; i++) {
+            const [caller, patch] = after[i];
+
             try {
-                const tempReturn = injection.after(this, params, returnValue);
+                const tempReturn = patch.call(this, this, params, returnValue);
                 if (typeof tempReturn !== "undefined") returnValue = tempReturn;
-            } catch (exception) {
-                Logger.error(`Failed to run after injection for ${injection.caller}:\n`, exception);
+            } catch (error) {
+                Logger.error(`Failed to run after injection for ${caller}:\n`, error);
             }
         }
 
         return returnValue;
     };
+
     Object.assign(module[method], originalMethod, {
         injection: {
             uninject: injection.revert,
@@ -125,7 +183,7 @@ export function createInjection(module, method) {
  * @returns {Injection}
  
  */
-export function resolveInjection(options) {
+export function resolveInjection(options): Injection {
     const {module, method} = options;
     let injection = injections.find(e => Object.is(e.module, module) && Object.is(e.method, method));
     if (!injection) {
@@ -137,7 +195,7 @@ export function resolveInjection(options) {
 
 /**
  * Inject into any module that is the typeof Function|Object. 
- * @param {InjectorOptions} options 
+ * @param {InjectorOptions} validatedOptions 
  * @returns {void}
  
  * @example
@@ -154,37 +212,50 @@ export function resolveInjection(options) {
  *          Logger.log("Patched message: ", params);
  *      }
  * });
+ * 
+ * // or
+ * Injector.inject("kernel-mod", console, "warn", (thisObject, params, res) => {
+ *      Logger.log("Patched message:", params);
+ * });
  * ```
  */
-export function inject(options) {
-    validateOptions(options);
+export function inject(...options: any[]) {
+    let validatedOptions = validateOptions(...(Array.isArray(options) ? options : [options]));
 
-    const injection = resolveInjection(options);
+    const injection = resolveInjection(validatedOptions);
 
-    const child = {
-        ...options,
-        uninject: (types = ["all"]) => {
-            const index = injection.children.indexOf(child);
-            if (index < 0) return false;
-            const foundChild = injection.children[index];
-            $loop: for (const type of types) switch (type) {
-                case "before":
-                    foundChild.cancelBefore = true;
-                    continue $loop;
-                case "after":
-                    foundChild.cancelAfter = true;
-                    continue $loop;
-                case "all":
-                    injection.children.splice(index, 1);
-                    break $loop;
+    const child: any = {
+        ...validatedOptions,
+        injection,
+        uninject: (...types: ("before" | "after" | "all")[]) => {
+            if (!types.length) types.push("all");
+
+            $loop: for (let i = 0; i < types.length; i++) {
+                switch (types[i]) {
+                    case "before": {
+                        injection.beforeCallbacks.delete(child.caller);
+                        continue $loop;
+                    }
+                        
+                    case "after": {
+                        injection.afterCallbacks.delete(child.caller);
+                        continue $loop;
+                    }
+                        
+                    case "all": {
+                        injection.beforeCallbacks.delete(child.caller);
+                        injection.afterCallbacks.delete(child.caller);
+                        break $loop;
+                    }
+                }
             }
-            if (foundChild.cancelAfter && !foundChild.before || foundChild.cancelBefore && !foundChild.after) {
-                injection.children.splice(index, 1);
-            }
+
+            if (injection.beforeCallbacks.size === 0 && injection.afterCallbacks.size === 0) injection.revert();
         }
     };
 
-    injection.children.push(child);
+    if (typeof child.after === "function") injection.afterCallbacks.set(child.caller, child.after);
+    if (typeof child.before === "function") injection.beforeCallbacks.set(child.caller, child.before);
 
     return child.uninject;
 };
@@ -195,12 +266,31 @@ export function inject(options) {
  * @returns {InjectionChild[]}
  
  */
-export function getInjectionsByCaller(caller) {
+export function getInjectionsByCaller(searchCaller: string) {
     let found = [];
-    for (const injection of injections) {
-        for (const child of injection.children) {
-            if (Object.is(child.caller, caller)) found.push(child);
+
+    const findInjections = function (type: "after" | "before", callbacks: CallbackMap) {
+        const childInjections = [...callbacks];
+
+        for (let i = 0; i < childInjections.length; i++) {
+            const [caller, patch] = childInjections[i];
+
+            if (Object.is(caller, searchCaller)) {
+                found.push({
+                    type: type,
+                    caller,
+                    patch,
+                    uninject() {
+                        callbacks.delete(caller);
+                    }
+                });
+            }
         }
+    };
+
+    for (let i = 0; i < injections.length; i++) {
+        findInjections("before", injections[i].beforeCallbacks);
+        findInjections("after", injections[i].afterCallbacks);
     }
 
     return found;
@@ -217,7 +307,10 @@ export function uninject(caller, types = ["all"]) {
     const injections = getInjectionsByCaller(caller);
     if (!injections.length) return false;
 
-    for (const child of injections) child.uninject(types);
+    for (let i = 0; i < injections.length; i++) {
+        injections[i].uninject(types);
+    }
+
     return true;
 };
 
@@ -229,8 +322,8 @@ export function create(caller) {
     if (typeof caller !== "string") throw new Error(`Caller must be a string, but got ${typeof caller} instead.`);
 
     return {
-        inject: options => inject(Object.assign({caller}, options)),
-        uninject: types => uninject(caller, types),
+        inject: (...options: any[]) => inject({caller}, options),
+        uninject: (...types: ("before" | "after" | "all")[]) => uninject(caller, types),
         getInjectionsByCaller: () => getInjectionsByCaller(caller)
     };
 }

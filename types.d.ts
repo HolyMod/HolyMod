@@ -63,7 +63,7 @@ declare module "@Holy" {
     export const DOM: typeof import("@Holy/DOM");
     export const ReactTools: typeof import("@Holy/ReactTools");
     export const Zustand: typeof import("@Holy/Zustand").default;
-    export const Utilities: typeof import("@Holy/Utilities");
+    export const Utilities: typeof import("@Holy/Utilities").default;
     export const Storage: typeof import("@Holy/Storage");
     export const SettingsStore: import("@classes/settings").default;
     export const Modals: typeof import("@ui/modals").default
@@ -166,48 +166,13 @@ declare module "@Holy/DiscordModules" {
 }
 
 declare module "@Holy/Injector" {
-    type UnpatchFunction = (types?: "all" | "before" | "after") => void;
-
-    type ChildInjection<M> = {
-        caller: string;
-        module: M;
-        method: string;
-        after?(): any;
-        before?(): any;
-        uninject: UnpatchFunction;
-    };
-
-    type Injection<M = any> = {
-        children: ChildInjection<M>[];
-        module: M;
-        originalMethod: Function;
-        revert(): void;
-    };
-
-    type InjectorOptions<D> = {
-        module: any;
-        method: string;
-        before?(thisObject: any, params: IArguments, res: any): any;
-        after?(thisObject: any, params: IArguments, res: any): any;
-    } & D;
-
-    export const injections: Injection[];
-
-    export function inject(options: InjectorOptions<{caller: string}>): UnpatchFunction;
-
-    export function uninject(caller: string, types?: ("all" | "before" | "after")[]): void;
-
-    export function getInjectionsByCaller(caller: string): ChildInjection<any>[];
-
-    export function create(caller: string): {
-        inject: (options: InjectorOptions<{caller?: string}>) => UnpatchFunction;
-        uninject: (types?: ("all" | "before" | "after")[]) => void;
-        getInjectionsByCaller(): ChildInjection<any>[];
-    };
+    export * from "@modules/injector";
 }
 
 declare module "@Holy/Utilities" {
-    export function joinClassNames(...classNames: (string | [boolean, string])[]): string;
+    const Utilities: typeof import("@modules/util").default;
+
+    export default Utilities;
 }
 
 declare module "@Holy/ReactTools" {
@@ -242,7 +207,7 @@ declare module "@Holy/Webpack" {
         get Filters(): {
             byProps(...props: string[]): ModuleFilter;
             byDisplayName(name: string, def?: boolean): ModuleFilter;
-            byTypeString(...strings: []): ModuleFilter;
+            byTypeString(...strings: string[]): ModuleFilter;
             byProtos(...protos: string[]): ModuleFilter;
         }
 

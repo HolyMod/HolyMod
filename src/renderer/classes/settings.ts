@@ -1,3 +1,4 @@
+import {Setting, wrapSettings} from "@ui/components/setting";
 import Store from "./store";
 
 export enum SettingsEvents {
@@ -10,6 +11,9 @@ export const cache = new Map();
 export const Panels = new Map();
 
 export default class SettingsStore extends Store {
+    get cache() {return cache;}
+    get Panels() {return Panels;}
+
     settings: {[setting: string]: any};
     id: string;
 
@@ -33,7 +37,7 @@ export default class SettingsStore extends Store {
     }
 
     saveState() {
-        HolyAPI.Storage.set(this.id, JSON.stringify(this.settings));
+        HolyAPI.Storage.set(this.id, this.settings);
     }
 
     addChangeListener(listener: Function) {
@@ -48,8 +52,16 @@ export default class SettingsStore extends Store {
         this.emit(SettingsEvents.SETTINGS_UPDATE);
     }
 
-    mount(render: () => string | JSX.Element | React.ReactElement) {
+    mount(render?: () => string | JSX.Element | React.ReactElement | Setting[]) {
         if (Panels.has(this.id)) throw new Error("Cannot register panel twice!");
+
+        if (typeof render !== "function") {
+            render ??= HolyAPI.Plugins.plugins.get(this.id)?.manifest?.settings;
+            if (typeof render === "undefined" || !Array.isArray(render)) throw new Error("Invalid settings! Nothing to register.");
+
+            const mapped = wrapSettings(render as unknown as Setting[], this);
+            render = () => mapped;
+        }
 
         Panels.set(this.id, render);
         this.emit(SettingsEvents.SETTINGS_MOUNT_CHANGE);

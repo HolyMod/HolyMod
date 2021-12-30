@@ -53,9 +53,19 @@ export default {
     Moment: {
         props: ["momentProperties"]
     },
+    Toasts: {
+        type: "MERGE",
+        props: [
+            ["createToast"],
+            ["showToast"]
+        ]
+    },
     // Stores
     SelectedChannelStore: {
         props: ["_dispatchToken", "getChannelId", "getLastSelectedChannelId"]
+    },
+    SelectedGuildStore: {
+        props: ["_dispatchToken", "getGuildId", "getLastSelectedGuildId"]
     },
     ChannelStore: {
         props: ["_dispatchToken", "getDMFromUserId"]
@@ -74,6 +84,15 @@ export default {
     },
     UserProfileStore: {
         props: ["_dispatchToken", "getUserProfile"]
+    },
+    WindowInfoStore: {
+        props: ["_dispatchToken", "isFocused", "windowSize"]
+    },
+    UserTypingStore: {
+        props: ["_dispatchToken", "isTyping", "getTypingUsers"]
+    },
+    RelationshipStore: {
+        props: ["_dispatchToken", "isFriend"]
     },
     // Components
     ModalComponents: {

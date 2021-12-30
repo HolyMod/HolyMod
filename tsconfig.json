@@ -1,6 +1,6 @@
 {
     "compilerOptions": {
-        "target": "ES2019",
+        "target": "esnext",
         "baseUrl": ".",
         "esModuleInterop": true,
         "jsx": "react-jsx",
@@ -8,7 +8,7 @@
         "moduleResolution": "node",
         "resolveJsonModule": true,
         "experimentalDecorators": true,
-        "module": "es2022",
+        "module": "ESNext",
         "paths": {
             "@powercord/*": ["src/renderer/powercord/*"],
             "@powercord": ["src/renderer/powercord/index"],
