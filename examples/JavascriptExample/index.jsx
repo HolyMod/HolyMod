@@ -1,6 +1,6 @@
 import {Modals} from "@Holy";
 
-export default class TypescriptExample {
+export default class JavacriptExample {
     onStart() {
         Modals.alert("Alert!", <>
             <h1>Important Alert</h1>

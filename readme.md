@@ -4,7 +4,7 @@
 - [Kernel](https://github.com/kernel-mod) electron clientmod.
 - [Git](https://git-scm.com/) client
 - [NodeJS](https://nodejs.org/) runtime
-- Package mnager such as [npm](https://www.npmjs.com/) or [pnpm](https://pnpm.io/) *(recommended)*
+- Package manager such as [npm](https://www.npmjs.com/) or [pnpm](https://pnpm.io/) *(recommended)*
 
 # Installation
 * Clone this repository into your kernel `packages` folder. (`git clone https://github.com/HolyMod/HolyMod` in your terminal.)
