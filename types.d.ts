@@ -61,12 +61,13 @@ declare module "@Holy" {
     export const LoggerModule: typeof import("@Holy/LoggerModule").default;
     export const DiscordModules: typeof import("@Holy/DiscordModules").default;
     export const DOM: typeof import("@Holy/DOM");
-    export const ReactTools: typeof import("@Holy/ReactTools");
+    export const ReactTools: typeof import("@Holy/ReactTools").default;
     export const Zustand: typeof import("@Holy/Zustand").default;
     export const Utilities: typeof import("@Holy/Utilities").default;
     export const Storage: typeof import("@Holy/Storage");
     export const SettingsStore: import("@classes/settings").default;
     export const Modals: typeof import("@ui/modals").default
+    export const ContextMenu: typeof import("@modules/../autopatchers/contextmenu").ContextMenu;
     /**
      * Only for plugins, will have everything bound to the plugin id.
      */
@@ -106,7 +107,7 @@ declare module "@Holy/Compilers" {
 
 declare module "@Holy/FS" {
     export function readFile(path: string, options: any): string;
-    export function createFile(path: string, content: string): string;
+    export function createFile(path: string, content: string | ArrayBuffer): string;
     export function deleteFile(path: string): void;
     export function exists(path: string): boolean;
     export function readDirectory(path: string): string[];
@@ -176,9 +177,15 @@ declare module "@Holy/Utilities" {
 }
 
 declare module "@Holy/ReactTools" {
-    export function findInReactTree(tree: any, filter: (current: any) => boolean): any;
-    export function getOwnerInstance(element: Element): any;
-    export function getReactInstance(element: Element): any;
+    const ReactTools: typeof import("@modules/reacttools").default;
+
+    export default ReactTools;
+}
+
+declare module "@Holy/ContextMenu" {
+    const ContextMenu: typeof import("@modules/../autopatchers/contextmenu").ContextMenu;
+
+    export default ContextMenu;
 }
 
 declare module "@Holy/Zustand" {
@@ -269,8 +276,16 @@ declare module "@Holy/Webpack" {
          * Waits for the webpack global namespace.
          */
         get waitForGlobal(): Promise<void>;
+
+        Modules: any;
     }
 
     const Webpack: WebpackModule;
     export default Webpack;
 }
+
+// Other types
+
+declare type ValueOf<T> = T[keyof T];
+
+declare const DiscordNative: any;

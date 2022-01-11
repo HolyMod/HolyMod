@@ -11,3 +11,4 @@ export {default as Zustand} from "./zustand";
 export {default as SettingsStore} from "../classes/settings";
 export {default as makePluginAPI} from "./pluginapi";
 export {default as Modals} from "@ui/modals";
+export * from "../autopatchers";
